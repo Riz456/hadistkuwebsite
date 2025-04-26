@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HaditsKu - Portal Hadits Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+      <link rel="website icon" type="png" href="alquran.png">
+    <style>
+        :root {
+            --primary: #0d6e6e;
+            --primary-light: rgba(13, 110, 110, 0.1);
+            --primary-dark: #0a4f4f;
+            --secondary: #d6ccb5;
+            --accent: #f5c361;
+            --dark: #1e2a3a;
+            --light: #f8f8f6;
+            --gray: #718096;
+            --arabic-font: 'Amiri', serif;
+            
+            /* Dark mode variables */
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
+            --dark-text: #e0e0e0;
+            --dark-border: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            padding-bottom: 60px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode .header {
+            background-color: var(--dark-card);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            color: var(--primary);
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover .logo-icon {
+            transform: scale(1.1);
+        }
+
+        .logo-text h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .search-container {
+            flex: 1;
+            margin: 0 12px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            background-color: var(--primary-light);
+            color: var(--dark);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        body.dark-mode .search-input {
+            background-color: rgba(255,255,255,0.1);
+            color: var(--dark-text);
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1), 0 0 0 2px var(--primary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--dark);
+            font-size: 1.1rem;
+            margin-left: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .theme-toggle {
+            color: var(--dark-text);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            color: var(--accent);
+        }
+
+        /* Main Content */
+        .main {
+            padding: 15px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .greeting {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(13, 110, 110, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .greeting:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(13, 110, 110, 0.3);
+        }
+
+        .greeting h2 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .time-info {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        /* Categories */
+        .categories {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            animation: fadeIn 0.6s ease-out 0.1s both;
+        }
+
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category {
+            padding: 8px 16px;
+            background-color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        body.dark-mode .category {
+            background-color: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+
+        .category.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 12px rgba(13, 110, 110, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .category:not(.active):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Hadith Cards */
+        .hadith-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .hadith-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+            animation: fadeIn 0.6s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hadith-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+        }
+
+        body.dark-mode .hadith-card {
+            background-color: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+
+        .hadith-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .hadith-arabic {
+            font-family: var(--arabic-font);
+            font-size: 1.5rem;
+            text-align: right;
+            line-height: 2;
+            margin-bottom: 15px;
+            color: var(--dark);
+            transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode .hadith-arabic {
+            color: var(--dark-text);
+        }
+
+        .hadith-translation {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 2px solid var(--secondary);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode .hadith-translation {
+            color: #CBD5E0;
+            border-left-color: var(--primary);
+        }
+
+        .hadith-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        .hadith-source {
+            color: var(--primary);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .hadith-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            color: #CBD5E0;
+            margin-bottom: 15px;
+            transition: all 0.4s ease;
+        }
+
+        .empty-state:hover .empty-icon {
+            transform: scale(1.1) rotate(5deg);
+            color: var(--primary);
+        }
+
+        .empty-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+            transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode .empty-title {
+            color: var(--dark-text);
+        }
+
+        .empty-desc {
+            font-size: 0.95rem;
+            color: var(--gray);
+            transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.08);
+            z-index: 90;
+            transform: translateY(0);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode .bottom-nav {
+            background-color: var(--dark-card);
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.2);
+        }
+
+        .bottom-nav.hidden {
+            transform: translateY(100%);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray);
+            font-size: 0.75rem;
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background-color: var(--primary-light);
+            transform: translateY(-5px);
+        }
+
+        .nav-item:not(.active):hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active i {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .hadith-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hadith-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-mosque logo-icon"></i>
+            <div class="logo-text">
+                <h1>HaditsKu</h1>
+            </div>
+        </div>
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Cari hadits...">
+        </div>
+        <button class="theme-toggle" id="themeToggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <section class="greeting">
+            <h2>Assalamu'alaikum</h2>
+            <div class="time-info">
+                <span id="date"></span>
+                <span>•</span>
+                <span id="time"></span>
+            </div>
+        </section>
+
+        <section class="categories">
+            <div class="category active">Semua</div>
+            <div class="category">Shalat</div>
+            <div class="category">Puasa</div>
+            <div class="category">Zakat</div>
+            <div class="category">Sedekah</div>
+            <div class="category">Akhlak</div>
+        </section>
+
+        <section class="hadith-list" id="hadithList">
+            <!-- Hadits akan dimuat di sini -->
+        </section>
+
+        <!-- Template untuk empty state -->
+        <template id="emptyTemplate">
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3 class="empty-title">Hadits Tidak Tersedia</h3>
+                <p class="empty-desc">Maaf, hadits untuk kategori ini belum tersedia</p>
+            </div>
+        </template>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" id="bottomNav">
+        <a href="index.html" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Beranda</span>
+        </a>
+        <a href="kitab-hadist.html" class="nav-item">
+            <i class="fas fa-book"></i>
+            <span>Kitab</span>
+        </a>
+        <a href="favorite-hadist.html" class="nav-item">
+            <i class="fas fa-heart"></i>
+            <span>Favorit</span>
+        </a>
+        <a href="profil-hadist.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Profil</span>
+        </a>
+    </nav>
+
+    <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const bottomNavLinks = document.querySelectorAll('#bottomNav a');
+
+    bottomNavLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault(); // Biar nggak reload sembarangan
+        const target = this.getAttribute('href');
+
+        if (target && target !== "#") {
+          window.location.href = target; // Pindah ke halaman tujuan
+        }
+      });
+    });
+  });
+        // Data hadits
+        const hadithData = {
+            "Semua": [
+                {
+                    arabic: "الصِّيَامُ جُنَّةٌ، فَإِذَا كَانَ يَوْمُ صَوْمِ أَحَدِكُمْ فَلَا يَرْفُثْ وَلَا يَصْخَبْ، فَإِنْ سَابَّهُ أَحَدٌ أَوْ قَاتَلَهُ فَلْيَقُلْ إِنِّي امْرُؤٌ صَائِمٌ",
+                    translation: "Puasa adalah perisai. Jika salah seorang dari kalian sedang berpuasa, janganlah berkata kotor dan berteriak-teriak. Jika ada orang yang mencaci atau memusuhinya, hendaklah ia mengatakan, 'Aku sedang berpuasa.'",
+                    source: "HR. Bukhari & Muslim"
+                },
+                {
+                  "arabic": "مَنْ صَامَ يَوْمًا فِي سَبِيلِ اللَّهِ، بَعَّدَ اللَّهُ بِذَلِكَ الْيَوْمِ وَجْهَهُ عَنِ النَّارِ سَبْعِينَ خَرِيفًا",
+                  "translation": "Barangsiapa berpuasa satu hari di jalan Allah, maka Allah akan menjauhkan wajahnya dari neraka sejauh tujuh puluh tahun.",
+                   "source": "HR. Bukhari & Muslim"
+              },
+                {
+                    arabic: "مَنْ صَامَ رَمَضَانَ إِيمَانًا وَاحْتِسَابًا غُفِرَ لَهُ مَا تَقَدَّمَ مِنْ ذَنْبِهِ",
+                    translation: "Barangsiapa berpuasa Ramadhan karena iman dan mengharap pahala, maka akan diampuni dosa-dosanya yang telah lalu.",
+                    source: "HR. Bukhari & Muslim"
+                },
+                {
+                    arabic: "مَا نَقَصَتْ صَدَقَةٌ مِنْ مَالٍ، وَمَا زَادَ اللَّهُ عَبْدًا بِعَفْوٍ إِلَّا عِزًّا",
+                    translation: "Sedekah tidak akan mengurangi harta, dan tidaklah Allah menambahkan kepada seorang hamba sifat pemaaf kecuali kemuliaan.",
+                    source: "HR. Muslim"
+                }
+            ],
+            "Shalat": [
+                {
+                    arabic: "إِذَا قَامَ أَحَدُكُمْ مِنَ اللَّيْلِ فَاسْتَعْجَمَ الْقُرْآنُ عَلَى لِسَانِهِ فَلَمْ يَدْرِ مَا يَقُولُ فَلْيَضْطَجِعْ",
+                    translation: "Jika salah seorang dari kalian bangun malam lalu lisannya kesulitan membaca Al-Qur'an sehingga tidak tahu apa yang diucapkannya, maka hendaklah ia berbaring (tidur).",
+                    source: "HR. Muslim"
+                }
+            ],
+            "Puasa": [
+                {
+                    arabic: "الصِّيَامُ جُنَّةٌ، فَإِذَا كَانَ يَوْمُ صَوْمِ أَحَدِكُمْ فَلَا يَرْفُثْ وَلَا يَصْخَبْ، فَإِنْ سَابَّهُ أَحَدٌ أَوْ قَاتَلَهُ فَلْيَقُلْ إِنِّي امْرُؤٌ صَائِمٌ",
+                    translation: "Puasa adalah perisai. Jika salah seorang dari kalian sedang berpuasa, janganlah berkata kotor dan berteriak-teriak. Jika ada orang yang mencaci atau memusuhinya, hendaklah ia mengatakan, 'Aku sedang berpuasa.'",
+                    source: "HR. Bukhari & Muslim"
+                }
+            ],
+            "Zakat": [],
+            "Sedekah": [
+                {
+                    arabic: "مَا نَقَصَتْ صَدَقَةٌ مِنْ مَالٍ، وَمَا زَادَ اللَّهُ عَبْدًا بِعَفْوٍ إِلَّا عِزًّا",
+                    translation: "Sedekah tidak akan mengurangi harta, dan tidaklah Allah menambahkan kepada seorang hamba sifat pemaaf kecuali kemuliaan.",
+                    source: "HR. Muslim"
+                }
+            ],
+            "Akhlak": [
+                {
+                    arabic: "مَنْ كَظَمَ غَيْظًا وَهُوَ قَادِرٌ عَلَى أَنْ يُنْفِذَهُ، دَعَاهُ اللَّهُ عَلَى رُءُوسِ الْخَلَائِقِ يَوْمَ الْقِيَامَةِ حَتَّى يُخَيِّرَهُ مِنَ الْحُورِ الْعِينِ مَا شَاءَ",
+                    translation: "Barangsiapa menahan amarah padahal ia mampu meluapkannya, maka Allah akan memanggilnya di hadapan seluruh makhluk pada Hari Kiamat hingga memilihkan bidadari surga yang ia kehendaki.",
+                    source: "HR. Abu Daud & Tirmidzi"
+                }
+            ]
+        };
+
+        // Fungsi untuk menampilkan waktu
+        function updateDateTime() {
+            const now = new Date();
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[now.getDay()];
+            const date = now.getDate();
+            const monthName = months[now.getMonth()];
+            const year = now.getFullYear();
+            
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            
+            document.getElementById('date').textContent = `${dayName}, ${date} ${monthName} ${year}`;
+            document.getElementById('time').textContent = `${hours}:${minutes}`;
+        }
+
+        // Fungsi untuk merender hadits
+        function renderHadith(category) {
+            const container = document.getElementById('hadithList');
+            container.innerHTML = '';
+            
+            const hadiths = hadithData[category] || [];
+            
+            if (hadiths.length === 0) {
+                const emptyTemplate = document.getElementById('emptyTemplate');
+                const emptyContent = emptyTemplate.content.cloneNode(true);
+                container.appendChild(emptyContent);
+            } else {
+                hadiths.forEach((hadith, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'hadith-card';
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    card.innerHTML = `
+                        <div class="hadith-arabic">${hadith.arabic}</div>
+                        <div class="hadith-translation">${hadith.translation}</div>
+                        <div class="hadith-meta">
+                            <span class="hadith-source">${hadith.source}</span>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        // Fungsi untuk toggle kategori
+        function setupCategoryButtons() {
+            const categories = document.querySelectorAll('.category');
+            categories.forEach(category => {
+                category.addEventListener('click', function() {
+                    categories.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Animasi klik
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                        renderHadith(this.textContent);
+                    }, 200);
+                });
+            });
+        }
+
+        // Fungsi untuk pencarian
+        function setupSearch() {
+            const searchInput = document.querySelector('.search-input');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const hadithCards = document.querySelectorAll('.hadith-card');
+                
+                if (searchTerm.length === 0) {
+                    const activeCategory = document.querySelector('.category.active');
+                    renderHadith(activeCategory.textContent);
+                    return;
+                }
+                
+                let hasResults = false;
+                
+                hadithCards.forEach(card => {
+                    const text = card.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        card.style.display = 'block';
+                        hasResults = true;
+                        
+                        // Animasi hasil pencarian
+                        card.style.animation = 'none';
+                        setTimeout(() => {
+                            card.style.animation = 'fadeIn 0.6s ease-out';
+                        }, 10);
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                if (!hasResults) {
+                    const container = document.getElementById('hadithList');
+                    const emptyTemplate = document.getElementById('emptyTemplate');
+                    const emptyContent = emptyTemplate.content.cloneNode(true);
+                    
+                    const emptyElement = emptyContent.querySelector('.empty-state');
+                    emptyElement.querySelector('.empty-title').textContent = 'Hasil Tidak Ditemukan';
+                    emptyElement.querySelector('.empty-desc').textContent = 'Tidak ada hadits yang sesuai dengan pencarian Anda';
+                    
+                    container.innerHTML = '';
+                    container.appendChild(emptyContent);
+                }
+            });
+        }
+
+        // Fungsi untuk bottom navigation
+        function setupBottomNav() {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Animasi klik
+                    this.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+        }
+
+        // Fungsi untuk toggle tema gelap
+        function setupThemeToggle() {
+            const themeToggle = document.getElementById('themeToggle');
+            const icon = themeToggle.querySelector('i');
+            
+            // Check for saved theme preference
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                icon.classList.replace('fa-moon', 'fa-sun');
+            }
+            
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                
+                // Animasi tombol tema
+                this.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+                
+                if (document.body.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark');
+                    icon.classList.replace('fa-moon', 'fa-sun');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    icon.classList.replace('fa-sun', 'fa-moon');
+                }
+            });
+        }
+
+        // Fungsi untuk hide/show footer saat scroll
+        function setupScrollBehavior() {
+            const bottomNav = document.getElementById('bottomNav');
+            let lastScrollPosition = 0;
+            let ticking = false;
+            
+            window.addEventListener('scroll', function() {
+                const currentScrollPosition = window.pageYOffset;
+                
+                if (!ticking) {
+                    window.requestAnimationFrame(function() {
+                        if (currentScrollPosition > lastScrollPosition && currentScrollPosition > 100) {
+                            // Scrolling down
+                            bottomNav.classList.add('hidden');
+                        } else {
+                            // Scrolling up
+                            bottomNav.classList.remove('hidden');
+                        }
+                        lastScrollPosition = currentScrollPosition;
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        }
+
+        // Inisialisasi
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            renderHadith('Semua');
+            setupCategoryButtons();
+            setupSearch();
+            setupBottomNav();
+            setupThemeToggle();
+            setupScrollBehavior();
+        });
+    </script>
+</body>
+</html>

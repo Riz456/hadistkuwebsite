@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shahih Bukhari - HaditsKu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="website icon" type="png" href="alquran.png">
+    <style>
+        :root {
+            --primary: #0d6e6e;
+            --primary-light: rgba(13, 110, 110, 0.1);
+            --primary-dark: #0a4f4f;
+            --secondary: #d6ccb5;
+            --accent: #f5c361;
+            --dark: #1e2a3a;
+            --light: #f8f8f6;
+            --gray: #718096;
+            --arabic-font: 'Amiri', serif;
+            
+            /* Dark mode variables */
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
+            --dark-text: #e0e0e0;
+            --dark-border: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            padding-bottom: 60px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode .header {
+            background-color: var(--dark-card);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            color: var(--primary);
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover .logo-icon {
+            transform: scale(1.1);
+        }
+
+        .logo-text h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-right: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-3px);
+        }
+
+        .page-title {
+            flex: 1;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        body.dark-mode .page-title {
+            color: var(--secondary);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--dark);
+            font-size: 1.1rem;
+            margin-left: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .theme-toggle {
+            color: var(--dark-text);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            color: var(--accent);
+        }
+
+        /* Main Content */
+        .main {
+            padding: 15px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Kitab Info */
+        .kitab-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode .kitab-header {
+            background-color: var(--dark-card);
+        }
+
+        .kitab-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2B9E8F;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .kitab-info {
+            flex: 1;
+        }
+
+        .kitab-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        body.dark-mode .kitab-title {
+            color: var(--dark-text);
+        }
+
+        .kitab-author {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .kitab-description {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* Hadits List */
+        .hadits-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .hadits-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.dark-mode .hadits-card {
+            background-color: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+
+        .hadits-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .hadits-number {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.8rem;
+            color: var(--gray);
+            background-color: var(--primary-light);
+            padding: 3px 8px;
+            border-radius: 20px;
+        }
+
+        .hadits-content {
+            font-family: var(--arabic-font);
+            font-size: 1.5rem;
+            text-align: right;
+            line-height: 1.8;
+            margin: 15px 0;
+            color: var(--dark);
+        }
+
+        body.dark-mode .hadits-content {
+            color: var(--dark-text);
+        }
+
+        .hadits-translation {
+            font-size: 0.9rem;
+            color: var(--gray);
+            font-style: italic;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--primary-light);
+        }
+
+        .hadits-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .hadits-favorite {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .hadits-favorite:hover {
+            color: var(--primary);
+        }
+
+        .hadits-favorite.active {
+            color: #e74c3c;
+        }
+
+        .hadits-favorite i {
+            font-size: 1.1rem;
+        }
+
+        .hadits-share {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .hadits-share:hover {
+            color: var(--primary);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .page-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .page-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .page-btn.active {
+            background-color: var(--primary-dark);
+            font-weight: bold;
+        }
+
+        .page-btn.disabled {
+            background-color: var(--gray);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.08);
+            z-index: 90;
+            transform: translateY(0);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode .bottom-nav {
+            background-color: var(--dark-card);
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.2);
+        }
+
+        .bottom-nav.hidden {
+            transform: translateY(100%);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray);
+            font-size: 0.75rem;
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background-color: var(--primary-light);
+            transform: translateY(-5px);
+        }
+
+        .nav-item:not(.active):hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active i {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .hadits-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hadits-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="back-btn" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="page-title">Shahih Bukhari</div>
+        <button class="theme-toggle" id="themeToggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="kitab-header">
+            <div class="kitab-icon">
+                <i class="fas fa-book-quran"></i>
+            </div>
+            <div class="kitab-info">
+                <h1 class="kitab-title">Shahih Bukhari</h1>
+                <p class="kitab-author">Imam Al-Bukhari</p>
+                <p class="kitab-description">
+                    Kitab hadits paling shahih setelah Al-Qur'an. Memuat 7563 hadits yang diriwayatkan oleh Imam Muhammad bin Ismail Al-Bukhari.
+                </p>
+            </div>
+        </div>
+
+        <div class="hadits-list" id="haditsList">
+            <!-- Daftar hadits akan dimuat di sini -->
+        </div>
+
+        <div class="pagination">
+            <button class="page-btn" id="prevPage"><i class="fas fa-chevron-left"></i></button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn" id="nextPage"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" id="bottomNav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Beranda</span>
+        </a>
+        <a href="kitab-hadist.html" class="nav-item">
+            <i class="fas fa-book"></i>
+            <span>Kitab</span>
+        </a>
+        <a href="favorite-hadist.html" class="nav-item">
+            <i class="fas fa-heart"></i>
+            <span>Favorit</span>
+        </a>
+        <a href="profil-hadist.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Profil</span>
+        </a>
+    </nav>
+
+    <script>
+      // Data contoh hadits Shahih Bukhari (30 hadits contoh)
+const allHaditsData = [
+    // Halaman 1 (1-10)
+    { id: 'bukhari-1', number: 1, arabic: 'إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ...', translation: 'Sesungguhnya amal itu tergantung niatnya...' },
+    { id: 'bukhari-2', number: 2, arabic: 'بُنِيَ الإِسْلاَمُ عَلَى خَمْسٍ...', translation: 'Islam dibangun atas lima perkara...' },
+    { id: 'bukhari-3', number: 3, arabic: 'الْحَلاَلُ بَيِّنٌ وَالْحَرَامُ بَيِّنٌ...', translation: 'Yang halal itu jelas dan yang haram itu jelas...' },
+    { id: 'bukhari-4', number: 4, arabic: 'إِنَّ اللَّهَ لاَ يَنْظُرُ إِلَى صُوَرِكُمْ...', translation: 'Sesungguhnya Allah tidak melihat pada rupa...' },
+    { id: 'bukhari-5', number: 5, arabic: 'مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ...', translation: 'Barangsiapa beriman kepada Allah...' },
+    { id: 'bukhari-6', number: 6, arabic: 'لاَ يَحِلُّ لِمُسْلِمٍ أَنْ يَهْجُرَ أَخَاهُ...', translation: 'Tidak halal bagi seorang muslim...' },
+    { id: 'bukhari-7', number: 7, arabic: 'تَبَسُّمُكَ فِي وَجْهِ أَخِيكَ...', translation: 'Senyummu di hadapan saudaramu...' },
+    { id: 'bukhari-8', number: 8, arabic: 'كُلُّ سُلاَمَى مِنَ النَّاسِ...', translation: 'Setiap persendian manusia...' },
+    { id: 'bukhari-9', number: 9, arabic: 'الرَّاحِمُونَ يَرْحَمُهُمُ الرَّحْمَنُ...', translation: 'Orang-orang yang penyayang...' },
+    { id: 'bukhari-10', number: 10, arabic: 'الكَلِمَةُ الطَّيِّبَةُ صَدَقَةٌ...', translation: 'Ucapan yang baik adalah sedekah...' },
+    
+    // Halaman 2 (11-20)
+    { id: 'bukhari-11', number: 11, arabic: 'مَا نَحَلَ وَالِدٌ وَلَدًا مِنْ نَحْلٍ...', translation: 'Tidak ada pemberian orang tua kepada anaknya...' },
+    { id: 'bukhari-12', number: 12, arabic: 'لاَ يُؤْمِنُ أَحَدُكُمْ حَتَّى يُحِبَّ لأَخِيهِ...', translation: 'Tidak sempurna iman seseorang di antara kamu...' },
+    { id: 'bukhari-13', number: 13, arabic: 'لاَ تَحَاسَدُوا، وَلاَ تَنَاجَشُوا...', translation: 'Janganlah kalian saling hasad...' },
+    { id: 'bukhari-14', number: 14, arabic: 'إِيَّاكُمْ وَالظَّنَّ فَإِنَّ الظَّنَّ...', translation: 'Jauhilah prasangka buruk...' },
+    { id: 'bukhari-15', number: 15, arabic: 'مَنْ كَانَ فِي حَاجَةِ أَخِيهِ...', translation: 'Barangsiapa membantu kebutuhan saudaranya...' },
+    { id: 'bukhari-16', number: 16, arabic: 'المُسْلِمُ مَنْ سَلِمَ المُسْلِمُونَ...', translation: 'Seorang muslim adalah orang yang...' },
+    { id: 'bukhari-17', number: 17, arabic: 'لاَ يَدْخُلُ الجَنَّةَ مَنْ كَانَ فِي قَلْبِهِ...', translation: 'Tidak akan masuk surga orang yang dalam hatinya...' },
+    { id: 'bukhari-18', number: 18, arabic: 'مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا...', translation: 'Barangsiapa menempuh jalan untuk mencari ilmu...' },
+    { id: 'bukhari-19', number: 19, arabic: 'الكَيِّسُ مَنْ دَانَ نَفْسَهُ...', translation: 'Orang yang cerdas adalah yang mengendalikan dirinya...' },
+    { id: 'bukhari-20', number: 20, arabic: 'إِذَا مَاتَ الإِنْسَانُ انْقَطَعَ عَنْهُ عَمَلُهُ...', translation: 'Jika seseorang meninggal dunia...' },
+    
+    // Halaman 3 (21-30)
+    { id: 'bukhari-21', number: 21, arabic: 'عَلَيْكُمْ بِالصِّدْقِ...', translation: 'Hendaklah kalian selalu jujur...' },
+    { id: 'bukhari-22', number: 22, arabic: 'الدِّينُ النَّصِيحَةُ...', translation: 'Agama adalah nasihat...' },
+    { id: 'bukhari-23', number: 23, arabic: 'مَا زَالَ جِبْرِيلُ يُوصِينِي بِالْجَارِ...', translation: 'Jibril terus menasihatiku tentang tetangga...' },
+    { id: 'bukhari-24', number: 24, arabic: 'لاَ يُشْرِكُ فِي الْقَضَاءِ بَيْنَ اثْنَيْنِ...', translation: 'Janganlah ikut campur dalam perselisihan dua orang...' },
+    { id: 'bukhari-25', number: 25, arabic: 'مَنْ كَذَبَ عَلَيَّ مُتَعَمِّدًا...', translation: 'Barangsiapa berdusta atas namaku...' },
+    { id: 'bukhari-26', number: 26, arabic: 'كُلُّ مَعْرُوفٍ صَدَقَةٌ...', translation: 'Setiap kebaikan adalah sedekah...' },
+    { id: 'bukhari-27', number: 27, arabic: 'اتَّقِ اللَّهَ حَيْثُمَا كُنْتَ...', translation: 'Bertakwalah kepada Allah di mana pun kamu berada...' },
+    { id: 'bukhari-28', number: 28, arabic: 'أَكْمَلُ الْمُؤْمِنِينَ إِيمَانًا...', translation: 'Mukmin yang paling sempurna imannya...' },
+    { id: 'bukhari-29', number: 29, arabic: 'الْبِرُّ حُسْنُ الْخُلُقِ...', translation: 'Kebaikan itu adalah akhlak yang baik...' },
+    { id: 'bukhari-30', number: 30, arabic: 'الْمُسْلِمُ أَخُو الْمُسْلِمِ...', translation: 'Seorang muslim adalah saudara muslim lainnya...' }
+];
+
+// Variabel pagination
+let currentPage = 1;
+const itemsPerPage = 10;
+const totalPages = Math.ceil(allHaditsData.length / itemsPerPage);
+
+// Fungsi untuk scroll ke atas dengan animasi
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+// Fungsi untuk mendapatkan data hadits per halaman
+function getPaginatedData(page) {
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return allHaditsData.slice(start, end);
+}
+
+// Fungsi untuk mengecek apakah hadits sudah difavoritkan
+function checkFavorite(id) {
+    const favorites = JSON.parse(localStorage.getItem('hadithFavorites')) || [];
+    return favorites.some(fav => fav.id === id);
+}
+
+// Fungsi untuk toggle favorit
+function toggleFavorite(id, button) {
+    const favorites = JSON.parse(localStorage.getItem('hadithFavorites')) || [];
+    const hadits = allHaditsData.find(h => h.id === id);
+    
+    const isFavorite = checkFavorite(id);
+    
+    if (isFavorite) {
+        // Hapus dari favorit
+        const updatedFavorites = favorites.filter(fav => fav.id !== id);
+        localStorage.setItem('hadithFavorites', JSON.stringify(updatedFavorites));
+        
+        button.innerHTML = '<i class="far fa-heart"></i> Simpan';
+        button.classList.remove('active');
+    } else {
+        // Tambahkan ke favorit
+        const newFavorite = {
+            id: hadits.id,
+            kitabName: 'Shahih Bukhari',
+            author: 'Imam Al-Bukhari',
+            hadithNumber: hadits.number,
+            arabicText: hadits.arabic,
+            translation: hadits.translation,
+            color: '#2B9E8F',
+            icon: 'fas fa-book-quran',
+            savedAt: new Date().toISOString()
+        };
+        
+        favorites.push(newFavorite);
+        localStorage.setItem('hadithFavorites', JSON.stringify(favorites));
+        
+        button.innerHTML = '<i class="fas fa-heart"></i> Favorit';
+        button.classList.add('active');
+    }
+}
+
+// Fungsi untuk share hadits
+function shareHadits(number, arabic, translation) {
+    const text = `${number} - Shahih Bukhari:\n\n${arabic}\n\nTerjemahan:\n${translation}\n\n-- Dari Aplikasi HaditsKu`;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: 'Hadits Shahih Bukhari',
+            text: text,
+            url: window.location.href
+        }).catch(err => {
+            console.log('Error sharing:', err);
+            fallbackShare(text);
+        });
+    } else {
+        fallbackShare(text);
+    }
+}
+
+// Fallback untuk browser yang tidak support Web Share API
+function fallbackShare(text) {
+    // Copy ke clipboard
+    navigator.clipboard.writeText(text).then(() => {
+        alert('Wih, Hadits dari Aplikasi HaditsKu udah berhasil ke-copy ke clipboard kamu! 🔥✨')
+    }).catch(err => {
+        console.log('Could not copy text: ', err);
+        prompt('Salin teks berikut:', text);
+    });
+}
+
+// Fungsi untuk merender daftar hadits
+function renderHaditsList(page) {
+    const container = document.getElementById('haditsList');
+    container.innerHTML = '';
+    
+    const haditsToShow = getPaginatedData(page);
+    
+    haditsToShow.forEach(hadits => {
+        const isFavorite = checkFavorite(hadits.id);
+        
+        const card = document.createElement('div');
+        card.className = 'hadits-card';
+        card.innerHTML = `
+            <span class="hadits-number">No. ${hadits.number}</span>
+            <div class="hadits-content">
+                ${hadits.arabic}
+            </div>
+            <div class="hadits-translation">
+                ${hadits.translation}
+            </div>
+            <div class="hadits-actions">
+                <button class="hadits-favorite ${isFavorite ? 'active' : ''}" data-id="${hadits.id}">
+                    <i class="${isFavorite ? 'fas' : 'far'} fa-heart"></i> ${isFavorite ? 'Favorit' : 'Simpan'}
+                </button>
+                <button class="hadits-share">
+                    <i class="fas fa-share-alt"></i> Bagikan
+                </button>
+            </div>
+        `;
+        
+        container.appendChild(card);
+    });
+    
+    // Setup event listeners untuk tombol favorit dan share
+    setupHaditsActions();
+    scrollToTop(); // Scroll ke atas setelah render
+}
+
+// Fungsi untuk setup action hadits (favorit dan share)
+function setupHaditsActions() {
+    // Tambahkan event listener untuk tombol favorit
+    document.querySelectorAll('.hadits-favorite').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            toggleFavorite(id, this);
+            
+            // Animasi tombol
+            this.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 200);
+        });
+    });
+    
+    // Tambahkan event listener untuk tombol share
+    document.querySelectorAll('.hadits-share').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const card = this.closest('.hadits-card');
+            const arabic = card.querySelector('.hadits-content').textContent;
+            const translation = card.querySelector('.hadits-translation').textContent;
+            const number = card.querySelector('.hadits-number').textContent;
+            
+            shareHadits(number, arabic, translation);
+            
+            // Animasi tombol
+            this.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 200);
+        });
+    });
+}
+
+// Fungsi untuk update tampilan pagination
+function updatePaginationUI() {
+    const pageBtns = document.querySelectorAll('.page-btn[data-page]');
+    const prevBtn = document.getElementById('prevPage');
+    const nextBtn = document.getElementById('nextPage');
+    
+    // Update active state
+    pageBtns.forEach(btn => {
+        const pageNum = parseInt(btn.getAttribute('data-page'));
+        btn.classList.toggle('active', pageNum === currentPage);
+    });
+    
+    // Update disabled state
+    prevBtn.classList.toggle('disabled', currentPage === 1);
+    nextBtn.classList.toggle('disabled', currentPage === totalPages);
+}
+
+// Fungsi untuk setup pagination event listeners
+function setupPagination() {
+    const pageBtns = document.querySelectorAll('.page-btn[data-page]');
+    const prevBtn = document.getElementById('prevPage');
+    const nextBtn = document.getElementById('nextPage');
+    
+    // Tombol nomor halaman
+    pageBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const pageNum = parseInt(this.getAttribute('data-page'));
+            if (pageNum !== currentPage) {
+                currentPage = pageNum;
+                renderHaditsList(currentPage);
+                updatePaginationUI();
+                
+                // Animasi tombol
+                this.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            }
+        });
+    });
+    
+    // Tombol previous
+    prevBtn.addEventListener('click', function() {
+        if (currentPage > 1) {
+            currentPage--;
+            renderHaditsList(currentPage);
+            updatePaginationUI();
+            
+            // Animasi tombol
+            this.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 200);
+        }
+    });
+    
+    // Tombol next
+    nextBtn.addEventListener('click', function() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderHaditsList(currentPage);
+            updatePaginationUI();
+            
+            // Animasi tombol
+            this.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 200);
+        }
+    });
+}
+
+// Fungsi untuk toggle tema gelap
+function setupThemeToggle() {
+    const themeToggle = document.getElementById('themeToggle');
+    const icon = themeToggle.querySelector('i');
+    
+    // Check for saved theme preference
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+        icon.classList.replace('fa-moon', 'fa-sun');
+    }
+    
+    themeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        
+        // Animasi tombol tema
+        this.style.transform = 'scale(1.2)';
+        setTimeout(() => {
+            this.style.transform = '';
+        }, 200);
+        
+        if (document.body.classList.contains('dark-mode')) {
+            localStorage.setItem('theme', 'dark');
+            icon.classList.replace('fa-moon', 'fa-sun');
+        } else {
+            localStorage.setItem('theme', 'light');
+            icon.classList.replace('fa-sun', 'fa-moon');
+        }
+    });
+}
+
+// Fungsi untuk hide/show footer saat scroll
+function setupScrollBehavior() {
+    const bottomNav = document.getElementById('bottomNav');
+    let lastScrollPosition = 0;
+    let ticking = false;
+    
+    window.addEventListener('scroll', function() {
+        const currentScrollPosition = window.pageYOffset;
+        
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                if (currentScrollPosition > lastScrollPosition && currentScrollPosition > 100) {
+                    // Scrolling down
+                    bottomNav.classList.add('hidden');
+                } else {
+                    // Scrolling up
+                    bottomNav.classList.remove('hidden');
+                }
+                lastScrollPosition = currentScrollPosition;
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+}
+
+// Fungsi untuk bottom navigation
+function setupBottomNav() {
+    const navItems = document.querySelectorAll('.nav-item');
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    
+    navItems.forEach(item => {
+        const itemHref = item.getAttribute('href').split('/').pop();
+        
+        // Set active class based on current page
+        if (itemHref === currentPage) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+        
+        // Add click animation
+        item.addEventListener('click', function(e) {
+            if (!this.classList.contains('active')) {
+                this.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            }
+        });
+    });
+}
+
+// Inisialisasi saat DOM siap
+document.addEventListener('DOMContentLoaded', function() {
+    renderHaditsList(currentPage);
+    setupPagination();
+    updatePaginationUI();
+    setupThemeToggle();
+    setupScrollBehavior();
+    setupBottomNav();
+});
+    </script>
+</body>
+</html>

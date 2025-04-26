@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitab Hadits - HaditsKu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="website icon" type="png" href="alquran.png">
+    <style>
+        :root {
+            --primary: #0d6e6e;
+            --primary-light: rgba(13, 110, 110, 0.1);
+            --primary-dark: #0a4f4f;
+            --secondary: #d6ccb5;
+            --accent: #f5c361;
+            --dark: #1e2a3a;
+            --light: #f8f8f6;
+            --gray: #718096;
+            --arabic-font: 'Amiri', serif;
+            
+            /* Dark mode variables */
+            --dark-bg: #121212;
+            --dark-card: #1e1e1e;
+            --dark-text: #e0e0e0;
+            --dark-border: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            padding-bottom: 60px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode .header {
+            background-color: var(--dark-card);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            color: var(--primary);
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover .logo-icon {
+            transform: scale(1.1);
+        }
+
+        .logo-text h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-right: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-3px);
+        }
+
+        .page-title {
+            flex: 1;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        body.dark-mode .page-title {
+            color: var(--secondary);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--dark);
+            font-size: 1.1rem;
+            margin-left: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .theme-toggle {
+            color: var(--dark-text);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            color: var(--accent);
+        }
+
+        /* Main Content */
+        .main {
+            padding: 15px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Kitab List */
+        .kitab-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+            /* Tambahkan style baru ini */
+
+        .kitab-card:focus, .kitab-card:active {
+            outline: none; /* Menghilangkan outline saat focus */
+        }
+
+        .kitab-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+            animation: fadeIn 0.6s ease-out;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+             text-decoration: none !important; /* Menghilangkan garis bawah */
+            color: inherit; /* Mempertahankan warna teks */
+            display: flex; /* Tetap mempertahankan flex layout */
+        }
+
+        .kitab-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+        }
+
+        body.dark-mode .kitab-card {
+            background-color: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+
+        .kitab-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .kitab-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .kitab-card:hover .kitab-icon {
+            transform: scale(1.1);
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .kitab-info {
+            flex: 1;
+        }
+
+        .kitab-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark);
+            transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode .kitab-title {
+            color: var(--dark-text);
+        }
+
+        .kitab-author {
+            font-size: 0.85rem;
+            color: var(--gray);
+            transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode .kitab-author {
+            color: #CBD5E0;
+        }
+
+        .kitab-stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+        }
+
+        .kitab-stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--gray);
+        }
+
+        .kitab-stat i {
+            color: var(--primary);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.08);
+            z-index: 90;
+            transform: translateY(0);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode .bottom-nav {
+            background-color: var(--dark-card);
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.2);
+        }
+
+        .bottom-nav.hidden {
+            transform: translateY(100%);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray);
+            font-size: 0.75rem;
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background-color: var(--primary-light);
+            transform: translateY(-5px);
+        }
+
+        .nav-item:not(.active):hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active i {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .kitab-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .kitab-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="back-btn" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="page-title">Daftar Kitab Hadits</div>
+        <button class="theme-toggle" id="themeToggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="kitab-list" id="kitabList">
+            <!-- Kitab akan dimuat di sini -->
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" id="bottomNav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Beranda</span>
+        </a>
+        <a href="kitab-hadist.html" class="nav-item active">
+            <i class="fas fa-book"></i>
+            <span>Kitab</span>
+        </a>
+        <a href="favorite-hadist.html" class="nav-item">
+            <i class="fas fa-heart"></i>
+            <span>Favorit</span>
+        </a>
+        <a href="profil-hadist.html" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Profil</span>
+        </a>
+    </nav>
+
+    <script>
+        // Data kitab hadits dengan URL tujuan masing-masing
+        const kitabData = [
+         {
+                id: 0,
+                title: "Mushaf Al-Qur'an",
+                author: "By: Nu online",
+                Count: 114,
+                icon: "fas fa-feather-alt",
+                color: "#2B9E8F",
+                url: "https://quran.nu.or.id/"
+            },
+           
+            {
+                id: 1,
+                title: "Shahih Bukhari",
+                author: "Imam Al-Bukhari",
+                hadithCount: 7563,
+                icon: "fas fa-book-quran",
+                color: "#2B9E8F",
+                url: "shahih-bukhari.html"
+            },
+            {
+                id: 2,
+                title: "Shahih Muslim",
+                author: "Imam Muslim",
+                hadithCount: 5362,
+                icon: "fas fa-book-quran",
+                color: "#2B7C9E",
+                url: "shahih-muslim.html"
+            },
+            {
+                id: 3,
+                title: "Sunan Abu Daud",
+                author: "Imam Abu Daud",
+                hadithCount: 4800,
+                icon: "fas fa-book-open",
+                color: "#9E5E2B",
+                url: "sunan-abu-daud.html"
+            },
+            {
+                id: 4,
+                title: "Sunan Tirmidzi",
+                author: "Imam At-Tirmidzi",
+                hadithCount: 3956,
+                icon: "fas fa-book-open",
+                color: "#6E2B9E",
+                url: "sunan-tirmidzi.html"
+            },
+            {
+                id: 5,
+                title: "Sunan An-Nasa'i",
+                author: "Imam An-Nasa'i",
+                hadithCount: 5762,
+                icon: "fas fa-book-open",
+                color: "#9E2B6E",
+                url: "sunan-nasai.html"
+            },
+            {
+                id: 6,
+                title: "Sunan Ibnu Majah",
+                author: "Imam Ibnu Majah",
+                hadithCount: 4341,
+                icon: "fas fa-book-open",
+                color: "#9E2B2B",
+                url: "sunan-ibnu-majah.html"
+            },
+            {
+                id: 7,
+                title: "Riyadhus Shalihin",
+                author: "Imam An-Nawawi",
+                hadithCount: 1896,
+                icon: "fas fa-star",
+                color: "#2B9E5E",
+                url: "riyadhus-shalihin.html"
+            },
+            {
+                id: 8,
+                title: "Bulughul Maram",
+                author: "Ibnu Hajar Al-Asqalani",
+                hadithCount: 1568,
+                icon: "fas fa-star",
+                color: "#9E8F2B",
+                url: "bulughul-maram.html"
+            },
+            {
+                id: 9,
+                title: "Al-Adab Al-Mufrad",
+                author: "Imam Al-Bukhari",
+                hadithCount: 1322,
+                icon: "fas fa-hands-helping",
+                color: "#2B6E9E",
+                url: "adab-mufrad.html"
+            }
+        ];
+
+        // Fungsi untuk merender daftar kitab
+        function renderKitabList() {
+            const container = document.getElementById('kitabList');
+            container.innerHTML = '';
+            
+            kitabData.forEach((kitab, index) => {
+                const card = document.createElement('a');
+                card.className = 'kitab-card';
+                card.href = kitab.url; // Link langsung ke halaman kitab
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.innerHTML = `
+                    <div class="kitab-icon" style="background-color: ${kitab.color}20; color: ${kitab.color}">
+                        <i class="${kitab.icon}"></i>
+                    </div>
+                    <div class="kitab-info">
+                        <h3 class="kitab-title">${kitab.title}</h3>
+                        <p class="kitab-author">${kitab.author}</p>
+                        <div class="kitab-stats">
+                            <span class="kitab-stat">
+                                <i class="fas fa-hadith"></i> ${kitab.hadithCount} hadits
+                            </span>
+                        </div>
+                    </div>
+                `;
+                
+                // Animasi saat diklik
+                card.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    card.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        card.style.transform = '';
+                        window.location.href = kitab.url;
+                    }, 200);
+                });
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Fungsi untuk toggle tema gelap
+        function setupThemeToggle() {
+            const themeToggle = document.getElementById('themeToggle');
+            const icon = themeToggle.querySelector('i');
+            
+            // Check for saved theme preference
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                icon.classList.replace('fa-moon', 'fa-sun');
+            }
+            
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                
+                // Animasi tombol tema
+                this.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+                
+                if (document.body.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark');
+                    icon.classList.replace('fa-moon', 'fa-sun');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    icon.classList.replace('fa-sun', 'fa-moon');
+                }
+            });
+        }
+
+        // Fungsi untuk hide/show footer saat scroll
+        function setupScrollBehavior() {
+            const bottomNav = document.getElementById('bottomNav');
+            let lastScrollPosition = 0;
+            let ticking = false;
+            
+            window.addEventListener('scroll', function() {
+                const currentScrollPosition = window.pageYOffset;
+                
+                if (!ticking) {
+                    window.requestAnimationFrame(function() {
+                        if (currentScrollPosition > lastScrollPosition && currentScrollPosition > 100) {
+                            // Scrolling down
+                            bottomNav.classList.add('hidden');
+                        } else {
+                            // Scrolling up
+                            bottomNav.classList.remove('hidden');
+                        }
+                        lastScrollPosition = currentScrollPosition;
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        }
+
+        // Fungsi untuk bottom navigation
+        function setupBottomNav() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            
+            navItems.forEach(item => {
+                const itemHref = item.getAttribute('href').split('/').pop();
+                
+                // Set active class based on current page
+                if (itemHref === currentPage) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+                
+                // Add click animation
+                item.addEventListener('click', function(e) {
+                    if (!this.classList.contains('active')) {
+                        this.style.transform = 'scale(0.9)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 200);
+                    }
+                });
+            });
+        }
+
+        // Inisialisasi
+        document.addEventListener('DOMContentLoaded', function() {
+            renderKitabList();
+            setupThemeToggle();
+            setupScrollBehavior();
+            setupBottomNav();
+        });
+    </script>
+</body>
+</html>
